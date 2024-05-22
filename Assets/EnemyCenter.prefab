@@ -202,4 +202,6 @@ MonoBehaviour:
     m_PreInfinity: 0
     m_PostInfinity: 0
     m_RotationOrder: 4
-  _hud: {fileID: 0}
+  _hud: {fileID: 3860796137045182213, guid: bc42b49b0a168ef4e9392acea85bc318, type: 3}
+  _head: {fileID: 3319295426136451455, guid: 21026ccc269b0d54d9ff44cc2503cc07, type: 3}
+  _boom: {fileID: -5010037798264934412, guid: 0d91d4aa885fda348be82f3bb6504d8c, type: 3}

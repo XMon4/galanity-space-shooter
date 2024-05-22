@@ -32,6 +32,6 @@ public class enemygunController : MonoBehaviour
     }
     public void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(_enemyprojectile.gameObject);
+        Destroy(this.gameObject);
     }
 }

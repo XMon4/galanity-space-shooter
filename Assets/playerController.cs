@@ -16,7 +16,6 @@ public class PlayerController: MonoBehaviour
 
     [SerializeField] private float _speed=1f;
     [SerializeField] public static Rigidbody2D _rigidbody2D;
-
     private Attach _attach = null;
     private clickButton _button = null;
     [SerializeField] private EnemyController _enemyP;
@@ -25,6 +24,10 @@ public class PlayerController: MonoBehaviour
     public PlayerController _player;
 
     [SerializeField] public projectileController _ProjectileController;
+
+    [SerializeField] private boomController _boom;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,9 +35,12 @@ public class PlayerController: MonoBehaviour
 
     }
 
+    [SerializeField] private float baseCooldown = .3f;
+    [SerializeField] private float fireCooldown = .3f;
     // Update is called once per frame
     void Update()
     {
+
         float xAxis = Input.GetAxis(_horzintalAxisName);
         float yAxis = Input.GetAxis(_vertialAxisName);
         _rigidbody2D.velocity = new Vector2(xAxis, yAxis) * _speed;
@@ -43,19 +49,25 @@ public class PlayerController: MonoBehaviour
             playerInteract();
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        fireCooldown -= Time.deltaTime;
+
+        if (Input.GetKeyUp(KeyCode.LeftShift) && fireCooldown <= 0f)
         {
+            fireCooldown = baseCooldown;
             //var newObject = Instantiate(_ProjectileController, new Vector2(_rigidbody2D.transform.position.x,_rigidbody2D.transform.position.y+1), Quaternion.identity);
-            _ProjectileController.fireUP(_rigidbody2D.transform.position.x,_rigidbody2D.transform.position.y);
+                            _ProjectileController.fireUP(_rigidbody2D.transform.position.x,_rigidbody2D.transform.position.y);
         }
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        if (Input.GetKeyUp(KeyCode.LeftControl)&& fireCooldown <= 0f)
         {
-            _ProjectileController.fireDOWN(_rigidbody2D.transform.position.x,_rigidbody2D.transform.position.y);
+            fireCooldown = baseCooldown;
+            _ProjectileController.fireDOWN(_rigidbody2D.transform.position.x, _rigidbody2D.transform.position.y);
         }
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
+        playerBoom();
+
         if (_hudController.hp != 0)
         {
             StartCoroutine(playerRespawn());
@@ -89,10 +101,16 @@ public class PlayerController: MonoBehaviour
 
     private IEnumerator playerRespawn()
     {
-        GetComponent<Renderer>().enabled = false;
+        //this.gameObject.GetComponent<SpriteRenderer>().sprite = newSprite;
         _rigidbody2D.position = new Vector2(0, -4);
         yield return new WaitForSecondsRealtime(1);
         _enemyP.enemyReset();
         GetComponent<Renderer>().enabled = true;
+    }
+
+    private void playerBoom()
+    {
+        GetComponent<Renderer>().enabled = false;
+        var boom = Instantiate(_boom, _rigidbody2D.transform.position, Quaternion.identity);
     }
 }

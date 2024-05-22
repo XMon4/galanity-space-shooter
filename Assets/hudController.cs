@@ -70,6 +70,7 @@ public class hudController : MonoBehaviour
 
     public void lvlClear()
     {
+        print("print from hud");
         _panelMessage.text = "Enemy Felled";
         hudPause();
     }

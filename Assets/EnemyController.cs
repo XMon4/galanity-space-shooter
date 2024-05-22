@@ -13,7 +13,8 @@ public class EnemyController : MonoBehaviour
     public AnimationCurve _AnimationCurveDive;
     [SerializeField] private hudController _hud;
     [SerializeField] private enemyheadController _head;
-    
+    [SerializeField] private boomController _boom;
+
     private bool enemyGo;
     private float currentTime;
 
@@ -23,6 +24,11 @@ public class EnemyController : MonoBehaviour
     {
         _currentVector2 = _enemyRigidbody2D.transform.position;
         enemyGo = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        var boom = Instantiate(_boom, other.transform.position, Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -53,6 +59,7 @@ public class EnemyController : MonoBehaviour
 
     public IEnumerator countHeads()
     {
+        print("print from counting");
         yield return new WaitForEndOfFrame();
         if(transform.GetComponentsInChildren<enemyheadController>().Length <= 0)
         {
@@ -63,6 +70,7 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator defeatedEnemy()
     {
+        print("print from enemy");
         enemyGo = false;
         yield return new WaitForSecondsRealtime(1);
         _hud.lvlClear();

@@ -25,6 +25,7 @@ public class enemyheadController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        print("print from head");
         Destroy(_enemyhead.gameObject);
         _enemyParent.StartCoroutine(_enemyParent.countHeads());
 
